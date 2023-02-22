@@ -3,7 +3,6 @@ import {
   Query,
   Mutation,
   Args,
-  Int,
   ResolveField,
   Parent,
 } from '@nestjs/graphql'
@@ -31,12 +30,12 @@ export class PostResolver {
   }
 
   @Query(() => Post, { name: 'post' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => String }) id: string) {
     return this.postService.findOne(id)
   }
 
-  @ResolveField(() => Author)
-  async author(@Parent() post: Post): Promise<Author> {
+  @ResolveField(() => Author, { name: 'author' })
+  async findAuthorByPost(@Parent() post: Post): Promise<Author> {
     return this.authorService.findOne(post.authorId)
   }
 }
